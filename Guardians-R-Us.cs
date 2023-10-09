@@ -48,7 +48,6 @@ namespace Guardians_R_Us
 
                 // Render Guardians relevant stats/mods
                 if (guardianObj != null)
-                if (guardianObj != null)
                 {
                     guardianObj.TryGetComponent<Stats>(out var guardianStatsComp);
                     guardianObj.TryGetComponent<Life>(out var LifeComp);
