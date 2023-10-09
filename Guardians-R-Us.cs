@@ -69,7 +69,7 @@ namespace Guardians_R_Us
                     ImGui.PushID(PUSHID);
 
                     string itemlabelName = modsComp.UniqueName != ""
-                        ? $"{modsComp.UniqueName}{baseComp.Name}##{item.GetHashCode}"
+                        ? $"{modsComp.UniqueName} {baseComp.Name}##{item.GetHashCode}"
                         : $"{baseComp.Name}##{item.GetHashCode}";
 
                     if (ImGui.TreeNodeEx($@"{itemlabelName}##{item.GetHashCode}", collapsingHeaderFlags))
