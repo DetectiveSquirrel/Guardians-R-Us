@@ -81,8 +81,8 @@ namespace Guardians_R_Us
                     if (ImGui.TreeNodeEx($@"{itemlabelName}##{item.GetHashCode}", collapsingHeaderFlags))
                     {
                         ImGui.Indent();
-                        ImGui.Text($@"Name: {baseComp.Name}");
                         ImGui.Text($@"Unique Name: {modsComp.UniqueName}");
+                        ImGui.Text($@"Name: {baseComp.Name}");
                         ImGui.Text($@"Mods: {modsComp.ItemMods.Count}");
                         foreach (var mod in modsComp.ItemMods)
                         {
