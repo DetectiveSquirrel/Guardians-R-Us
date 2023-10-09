@@ -1,7 +1,9 @@
 ﻿using ExileCore;
 using ExileCore.PoEMemory.Components;
+using ExileCore.PoEMemory.MemoryObjects;
 using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vector4 = System.Numerics.Vector4;
 
@@ -13,24 +15,29 @@ namespace Guardians_R_Us
         {
             try
             {
-                if (!Settings.Enable)
+                if (!Settings.Enable || !GameController.IngameState.InGame)
                     return;
 
                 // Guardian Inventory (which is ours)
                 var guardianItems = GameController.IngameState.Data.ServerData.GetPlayerInventoryByType(ExileCore.Shared.Enums.InventoryTypeE.AnimatedArmour).Items;
 
-                DeployedObject guardianObj = null;
+                Entity guardianObj = null;
 
-                if (GameController.IngameState.Data.LocalPlayer.TryGetComponent<Actor>(out var playerActorComp) && playerActorComp.DeployedObjectsCount > 0)
+                if (GameController.IngameState.Data.LocalPlayer.TryGetComponent<Actor>(out var playerActorComp))
                 {
-                    var guardianEntities = playerActorComp.DeployedObjects
-                        .Where(x => x.Entity.RenderName == "Animated Guardian")
-                        .ToList();
+                    var deployedObjectsCopy = playerActorComp.DeployedObjects.ToList();
 
-                    if (guardianEntities.Count > 1)
-                        LogError("[Guardians-R-Us] guardianEntities.Count > 1; Please check what's happening");
-                    else if (guardianEntities.Count == 1)
-                        guardianObj = guardianEntities.First();
+                    var guardianEntities = (from deployedObject in deployedObjectsCopy
+                                            where deployedObject.Entity != null && deployedObject.Entity.IsValid && deployedObject.Entity.Metadata != null && deployedObject.Entity.Metadata == "Metadata/Monsters/AnimatedItem/AnimatedArmour"
+                                            select deployedObject).ToList();
+
+                    if (guardianEntities != null)
+                    {
+                        if (guardianEntities.Count > 1)
+                            LogError("[Guardians-R-Us] guardianEntities.Count > 1; Please check what's happening");
+                        else if (guardianEntities.Count == 1)
+                            guardianObj = guardianEntities.FirstOrDefault().Entity;
+                    }
                 }
 
                 var green = new Vector4(0.102f, 0.388f, 0.106f, 1.000f);
@@ -41,9 +48,10 @@ namespace Guardians_R_Us
 
                 // Render Guardians relevant stats/mods
                 if (guardianObj != null)
+                if (guardianObj != null)
                 {
-                    guardianObj.Entity.TryGetComponent<Stats>(out var guardianStatsComp);
-                    guardianObj.Entity.TryGetComponent<Life>(out var LifeComp);
+                    guardianObj.TryGetComponent<Stats>(out var guardianStatsComp);
+                    guardianObj.TryGetComponent<Life>(out var LifeComp);
 
                     ImGui.PushStyleColor(ImGuiCol.Header, green);
                     ImGui.PushID(PUSHID);
@@ -91,7 +99,7 @@ namespace Guardians_R_Us
             }
             catch (Exception ex)
             {
-                LogError(@$"[Guardians-R-Us] {ex.StackTrace}");
+                LogError(@$"[Guardians-R-Us] {ex}", 15);
             }
         }
     }
