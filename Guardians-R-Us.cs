@@ -21,23 +21,19 @@ namespace Guardians_R_Us
                 // Guardian Inventory (which is ours)
                 var guardianItems = GameController.IngameState.Data.ServerData.GetPlayerInventoryByType(ExileCore.Shared.Enums.InventoryTypeE.AnimatedArmour).Items;
 
-                Entity guardianObj = null;
+                // Create a list to store all matching entities
+                List<Entity> matchingEntities = new List<Entity>();
 
                 if (GameController.IngameState.Data.LocalPlayer.TryGetComponent<Actor>(out var playerActorComp))
                 {
                     var deployedObjectsCopy = playerActorComp.DeployedObjects.ToList();
 
                     var guardianEntities = (from deployedObject in deployedObjectsCopy
-                                            where deployedObject.Entity != null && deployedObject.Entity.IsValid && deployedObject.Entity.Metadata != null && deployedObject.Entity.Metadata == "Metadata/Monsters/AnimatedItem/AnimatedArmour"
-                                            select deployedObject).ToList();
+                                            where deployedObject.Entity != null && deployedObject.Entity.IsValid &&
+                                                  deployedObject.Entity.Metadata != null && deployedObject.Entity.Metadata == "Metadata/Monsters/AnimatedItem/AnimatedArmour"
+                                            select deployedObject.Entity).ToList();
 
-                    if (guardianEntities != null)
-                    {
-                        if (guardianEntities.Count > 1)
-                            LogError("[Guardians-R-Us] guardianEntities.Count > 1; Please check what's happening");
-                        else if (guardianEntities.Count == 1)
-                            guardianObj = guardianEntities.FirstOrDefault().Entity;
-                    }
+                    matchingEntities.AddRange(guardianEntities);
                 }
 
                 var green = new Vector4(0.102f, 0.388f, 0.106f, 1.000f);
@@ -46,15 +42,18 @@ namespace Guardians_R_Us
 
                 var PUSHID = 1000;
 
-                // Render Guardians relevant stats/mods
-                if (guardianObj != null)
+                // Render all matching entities
+                foreach (var entity in matchingEntities)
                 {
-                    guardianObj.TryGetComponent<Stats>(out var guardianStatsComp);
-                    guardianObj.TryGetComponent<Life>(out var LifeComp);
+                    entity.TryGetComponent<Stats>(out var guardianStatsComp);
+                    entity.TryGetComponent<Life>(out var lifeComp);
 
                     ImGui.PushStyleColor(ImGuiCol.Header, green);
                     ImGui.PushID(PUSHID);
-                    if (ImGui.TreeNodeEx($@"Guardian (Life:{LifeComp?.MaxHP} / ES:{LifeComp?.MaxES} / Mana:{LifeComp?.Mana.Max})##{guardianObj.GetHashCode}", collapsingHeaderFlags))
+
+                    string headerText = $"{entity.RenderName} (Life:{lifeComp?.MaxHP} / ES:{lifeComp?.MaxES} / Mana:{lifeComp?.Mana.Max})##{entity.GetHashCode}";
+
+                    if (ImGui.TreeNodeEx(headerText, collapsingHeaderFlags))
                     {
                         ImGui.Indent();
                         foreach (var stat in guardianStatsComp.StatDictionary)
