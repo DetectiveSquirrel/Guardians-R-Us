@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardians-R-Us", "Guardians-R-Us.csproj", "{127CC0AB-F2A2-40FF-B4B1-F1BB211C29B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{127CC0AB-F2A2-40FF-B4B1-F1BB211C29B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127CC0AB-F2A2-40FF-B4B1-F1BB211C29B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127CC0AB-F2A2-40FF-B4B1-F1BB211C29B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127CC0AB-F2A2-40FF-B4B1-F1BB211C29B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BBCD5447-C901-4BEC-8AB1-4121C812C524}
+	EndGlobalSection
+EndGlobal
