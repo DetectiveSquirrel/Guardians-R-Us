@@ -71,7 +71,7 @@ namespace Guardians_R_Us
                     item.TryGetComponent<Base>(out var baseComp);
                     item.TryGetComponent<Mods>(out var modsComp);
 
-                    ImGui.PushStyleColor(ImGuiCol.Header, green);
+                    ImGui.PushStyleColor(ImGuiCol.Header, red);
                     ImGui.PushID(PUSHID);
 
                     string itemlabelName = modsComp.UniqueName != ""
